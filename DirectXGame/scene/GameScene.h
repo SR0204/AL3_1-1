@@ -60,7 +60,8 @@ private: // メンバ変数
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 
-	
+	//ImGuiで値を入力する変数
+	float inputFloat3[3] = {0, 0, 0};
 
 	/// </summary>
 };

@@ -2,6 +2,8 @@
 #include "TextureManager.h"
 #include <cassert>
 #include "ImGuiManager.h"
+#include "PrimitiveDrawer.h"
+
 
 //コンストラクタ
 GameScene::GameScene() {}
@@ -35,6 +37,9 @@ void GameScene::Initialize() {
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
+	//ライン描画が参照するビュープロジェクションを指定する（アドレス渡し）
+	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 
@@ -51,8 +56,18 @@ void GameScene::Update() {
 
 	//デバッグテキストの表示
 	ImGui::Begin("Debug1");
-	ImGui::Text("Kamata Tarou %d.%d.%d", 2050, 12, 31);
+	ImGui::Text("Kamata Tarou %f.%f.%d", 2050, 12, 31);
+
+	//float3入力ボックス
+	ImGui::InputFloat3("InputFloat3", inputFloat3);
+
+	//float3スライダー
+	ImGui::SliderFloat3("SliderFloat3", inputFloat3, 0.0f, 1.0f);
+
 	ImGui::End();
+
+	//デモウィンドウの表示
+	ImGui::ShowDemoWindow();
 }
 
 void GameScene::Draw() {
@@ -83,6 +98,10 @@ void GameScene::Draw() {
 	/// </summary>
 
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+
+	//ラインを描画する
+	PrimitiveDrawer::GetInstance()->DrawLine3d({0, 0, 0}, {0, 10, 0}, {1.0f, 0.0f, 0.0f, 1.0f});
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
