@@ -1,19 +1,59 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "ImGuiManager.h"
 
+//コンストラクタ
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+//デストラクタ
+GameScene::~GameScene() { 
+	delete sprite_; 
+	delete model_;
+}
+
 
 void GameScene::Initialize() {
+
+
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	//テクスチャー
+	textureHandle_ = TextureManager::Load("illustration.png");
+
+	//スプライトの生成
+	sprite_ = Sprite::Create(textureHandle_, {10, 10});
+
+	//3Dモデルの生成
+	model_ = Model::Create();
+
+	//ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
+
+	//ビュープロジェクションの初期化
+	viewProjection_.Initialize();
 }
 
-void GameScene::Update() {}
+
+//更新
+void GameScene::Update() {
+
+	//スプライトの今の座標を取得
+	Vector2 position = sprite_->GetPosition();
+	//座標を{2,1}移動
+	position.x += 2.0f;
+	position.y += 1.0f;
+	//移動した座標をスプライトに反映
+	sprite_->SetPosition(position);
+
+	//デバッグテキストの表示
+	ImGui::Begin("Debug1");
+	ImGui::Text("Kamata Tarou %d.%d.%d", 2050, 12, 31);
+	ImGui::End();
+}
 
 void GameScene::Draw() {
 
@@ -42,6 +82,8 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
+	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -53,6 +95,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
+	sprite_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
