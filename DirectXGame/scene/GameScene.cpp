@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
-#include"Player.h"
+
 
 
 GameScene::GameScene() {}
@@ -13,14 +13,14 @@ GameScene::~GameScene() {
 	delete player_;
 }
 
-void GameScene::Initialize() {
+void GameScene::Initialize(Model* model, uint32_t textureHandle) {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
 	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("illustration.png");
+	textureHandle_ = TextureManager::Load("a.png");
 
 	//3Dモデルの生成
 	model_ = Model::Create();
@@ -28,12 +28,17 @@ void GameScene::Initialize() {
 	//ビュープロジェクション
 	viewProjection_.Initialize();
 
+	//自キャラの生成
+	player_ = new Player();
+
+	//自キャラの初期化
+	player_->Initialize(model, textureHandle);
 
 }
 
 void GameScene::Update() {
 	//自キャラの更新
-	player_
+	player_->Update();
 
 
 }

@@ -17,7 +17,7 @@ public:
 	///< summary>
 	/// 初期化
 	///  </summary>
-	void Initialize(Model*model,uint32_t textureHandle);
+	void Initialize(Model*model,uint32_t textureHandle,ViewProjection*viewProjection);
 
 	///< summary>
 	/// 更新
@@ -42,6 +42,6 @@ private:
 	//自キャラ
 	Player* player_ = nullptr;
 
-	
+	ViewProjection* viewProjection_ = nullptr;
 
 };
