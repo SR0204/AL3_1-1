@@ -13,14 +13,14 @@ GameScene::~GameScene() {
 	delete player_;
 }
 
-void GameScene::Initialize(Model* model, uint32_t textureHandle) {
+void GameScene::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection) {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
 	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("a.png");
+	textureHandle_ = TextureManager::Load("illustration.png");
 
 	//3Dモデルの生成
 	model_ = Model::Create();
@@ -32,7 +32,7 @@ void GameScene::Initialize(Model* model, uint32_t textureHandle) {
 	player_ = new Player();
 
 	//自キャラの初期化
-	player_->Initialize(model, textureHandle);
+	player_->Initialize(model, textureHandle,viewProjection);
 
 }
 

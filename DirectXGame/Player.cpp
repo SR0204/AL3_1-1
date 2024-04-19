@@ -7,7 +7,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* vi
 	player_ = new Player();
 
 	//自キャラの初期化
-	player_->Initialize(model, textureHandle);
+	player_->Initialize(model, textureHandle,viewProjection);
 
 	//NULLポインタチェック
 	assert(model);
@@ -27,7 +27,7 @@ void Player::Update() {
 void Player::Draw() {
 
 	//3Dモデル
-	model_->Draw(worldTransform_, textureHandle_,viewProjection_ );
+	model_->Draw(worldTransform_,viewProjection_,textureHandle_ );
 
 
 }
