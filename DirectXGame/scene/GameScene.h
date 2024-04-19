@@ -49,5 +49,11 @@ private: // メンバ変数
 	/// ゲームシーン用
 	uint32_t textureHandle_ = 0;
 	
+	//3Dモデルの生成
+	Model* model_ = nullptr;
+
+	//ビュープロジェクション
+	ViewProjection viewProjection_;
+
 	/// </summary>
 };

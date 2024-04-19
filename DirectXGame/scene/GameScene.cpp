@@ -1,10 +1,17 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include"Player.h"
+
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+//デストラクタ
+
+GameScene::~GameScene() {
+	delete model_;
+	delete player_;
+}
 
 void GameScene::Initialize() {
 
@@ -12,11 +19,24 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	textureHandle_ = TextureManager::Load()
+	//テクスチャ読み込み
+	textureHandle_ = TextureManager::Load("illustration.png");
+
+	//3Dモデルの生成
+	model_ = Model::Create();
+
+	//ビュープロジェクション
+	viewProjection_.Initialize();
+
 
 }
 
-void GameScene::Update() {}
+void GameScene::Update() {
+	//自キャラの更新
+	player_
+
+
+}
 
 void GameScene::Draw() {
 
@@ -40,6 +60,10 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
+
+	//自キャラの描画
+	player_->Draw();
+
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
