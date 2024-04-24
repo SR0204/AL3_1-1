@@ -13,10 +13,12 @@ class Player {
 
 public:
 
-
-	///< summary>
+	/// <summary>
 	/// 初期化
-	///  </summary>
+	/// </summary>
+	/// <param name="model"></param>
+	/// <param name="textureHandle"></param>
+	/// <param name="viewProjection"></param>
 	void Initialize(Model*model,uint32_t textureHandle,ViewProjection*viewProjection);
 
 	///< summary>

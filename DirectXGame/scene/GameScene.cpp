@@ -2,45 +2,44 @@
 #include "TextureManager.h"
 #include <cassert>
 
-
-
 GameScene::GameScene() {}
 
-//デストラクタ
+// デストラクタ
 
 GameScene::~GameScene() {
 	delete model_;
+
 	delete player_;
 }
 
-void GameScene::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection) {
+void GameScene::Initialize(Model* model, uint32_t textureHandle) {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	//テクスチャ読み込み
+	// テクスチャ読み込み
 	textureHandle_ = TextureManager::Load("illustration.png");
 
-	//3Dモデルの生成
+	// 3Dモデルの生成
 	model_ = Model::Create();
 
-	//ビュープロジェクション
+
+
+	// ビュープロジェクション
 	viewProjection_.Initialize();
 
-	//自キャラの生成
+	// 自キャラの生成
 	player_ = new Player();
 
-	//自キャラの初期化
-	player_->Initialize(model, textureHandle,viewProjection);
-
+	// 自キャラの初期化
+	player_->Initialize(model, textureHandle, &viewProjection_);
 }
 
 void GameScene::Update() {
-	//自キャラの更新
+
+	// 自キャラの更新
 	player_->Update();
-
-
 }
 
 void GameScene::Draw() {
@@ -66,14 +65,11 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	//自キャラの描画
-	player_->Draw();
-
-
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-
+	// 自キャラの描画
+	player_->Draw();
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion

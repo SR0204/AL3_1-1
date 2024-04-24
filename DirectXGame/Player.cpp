@@ -3,31 +3,30 @@
 
 void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection) {
 
-	//自キャラの生成
-	player_ = new Player();
 
-	//自キャラの初期化
-	player_->Initialize(model, textureHandle,viewProjection);
-
-	//NULLポインタチェック
+	// NULLポインタチェック
 	assert(model);
 
-	//引数の内容をメンバ変数に記録
+	// 引数
+	model_ = model;
+	textureHandle_ = textureHandle;
+
+	viewProjection_ = viewProjection;
+
+	//ワールド変換の初期化
+	worldTransform_.Initialize();
+
+	// 引数の内容をメンバ変数に記録
 	viewProjection_ = viewProjection;
 }
 
-
-
 void Player::Update() {
-	//行列を定数バッファに転送
+	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
-
 }
 
 void Player::Draw() {
 
-	//3Dモデル
-	model_->Draw(worldTransform_,viewProjection_,textureHandle_ );
-
-
+	// 3Dモデルの描画
+	model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
 }
