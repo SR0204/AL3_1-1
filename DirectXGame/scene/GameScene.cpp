@@ -11,6 +11,10 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	//3Dモデルデータの生成
+
+
 }
 
 void GameScene::Update() {}

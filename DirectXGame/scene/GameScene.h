@@ -47,4 +47,7 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	
+	// 3Dモデルデータ
+	Model* model_ = nullptr;
 };
