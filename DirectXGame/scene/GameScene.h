@@ -53,6 +53,9 @@ private: // メンバ変数
 	// 3Dモデルデータ
 	Model* modelBlock_ = nullptr;
 
-	std::vector<WorldTransform*> worldTransformBlocks_;
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
+
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 };
