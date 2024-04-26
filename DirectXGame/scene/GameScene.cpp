@@ -12,7 +12,7 @@ GameScene::~GameScene() {
 	delete player_;
 }
 
-void GameScene::Initialize(Model* model, uint32_t textureHandle) {
+void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -33,7 +33,7 @@ void GameScene::Initialize(Model* model, uint32_t textureHandle) {
 	player_ = new Player();
 
 	// 自キャラの初期化
-	player_->Initialize(model, textureHandle, &viewProjection_);
+	player_->Initialize(model_, textureHandle_, &viewProjection_);
 }
 
 void GameScene::Update() {
