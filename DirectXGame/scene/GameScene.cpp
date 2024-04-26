@@ -4,7 +4,10 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+	
+
+}
 
 void GameScene::Initialize() {
 
@@ -12,8 +15,9 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	//3Dモデルデータの生成
-
+	
+	//  3Dモデルの生成
+	model_ = Model::Create();
 
 }
 
