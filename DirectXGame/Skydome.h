@@ -1,7 +1,7 @@
 #pragma once
 
-#include "WorldTransform.h"
 #include "GameScene.h"
+#include "WorldTransform.h"
 
 /// <summary>
 /// 天球
@@ -24,10 +24,10 @@ public:
 	/// </summary>
 	void Draw();
 
-	private:
-		//ワールド変換データ
-	    WorldTransform worldTransform_;
+private:
+	// ワールド変換データ
+	WorldTransform worldTransform_;
 
-		//モデル
-	    Model* model_ = nullptr;
+	// モデル
+	Model* model_ = nullptr;
 };
