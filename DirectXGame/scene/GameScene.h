@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include<vector>
+#include"DebugCamera.h"
 
 
 /// <summary>
@@ -58,4 +59,9 @@ private: // メンバ変数
 
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
+	//デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+
+	//デバッグカメラ
+	DebugCamera* debugCamera_ = nullptr;
 };
