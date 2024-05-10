@@ -10,6 +10,16 @@ class Skydome {
 
 public:
 	/// <summary>
+	/// コンストクラタ
+	/// </summary>
+	Skydome();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Skydome();
+
+	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Initialize();
@@ -30,4 +40,7 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
+
+	//3Dモデル
+	Model* modelSkydome_ = nullptr;
 };
