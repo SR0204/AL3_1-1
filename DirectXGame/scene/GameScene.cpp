@@ -18,6 +18,8 @@ GameScene::~GameScene() {
 	// デバッグカメラ
 	delete debugCamera_;
 
+
+
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 
@@ -35,6 +37,9 @@ void GameScene::Initialize() {
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
+
+
 
 	// 3Dモデルの生成
 	modelBlock_ = Model::Create();

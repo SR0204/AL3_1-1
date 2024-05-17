@@ -11,6 +11,7 @@
 #include"DebugCamera.h"
 #include"Skydome.h"
 
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -51,6 +52,15 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 	
+	/// ゲームシーン用
+	uint32_t textureHandle_ = 0;
+
+	// 3Dモデルの生成
+	Model* model_ = nullptr;
+
+
+	
+
 	// 3Dモデルデータ
 	Model* modelBlock_ = nullptr;
 
