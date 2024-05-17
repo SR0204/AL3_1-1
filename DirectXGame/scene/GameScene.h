@@ -9,7 +9,7 @@
 #include "WorldTransform.h"
 #include<vector>
 #include"DebugCamera.h"
-
+#include"Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -53,6 +53,13 @@ private: // メンバ変数
 	
 	// 3Dモデルデータ
 	Model* modelBlock_ = nullptr;
+
+	//天球
+	Skydome* skyDome_ = nullptr;
+
+	//天球モデルデータ
+	Model* modelSkydome_ = nullptr;
+
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;

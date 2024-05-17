@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "MathUtilityForText.h"
+#include "Skydome.h"
 #include "TextureManager.h"
 #include <cassert>
 
@@ -7,8 +8,12 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	// デストラクタ
+
 	// 3Dモデルデータの解放
 	delete modelBlock_;
+
+	// 天球
+	delete skyDome_;
 
 	// デバッグカメラ
 	delete debugCamera_;
@@ -33,12 +38,24 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの生成
 	modelBlock_ = Model::Create();
+
+	// 天球の生成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
+	// 天球
+	skyDome_ = new Skydome();
+
+	// 天球の初期化
+	skyDome_->Initialize(modelSkydome_, &viewProjection_);
+
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
+
 	// ブロック一個分の横幅
 	const float kBlockWidth = 2.0f;
 	const float kBlockHeight = 2.0f;
+
 	// 要素数を変更する
 	worldTransformBlocks_.resize(kNumBlockVirtical);
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
@@ -69,17 +86,17 @@ void GameScene::Update() {
 				continue;
 
 			// 平行移動
-			//Matrix4x4 result{
+			// Matrix4x4 result{
 			//    1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, worldTransformBlock->translation_.x, worldTransformBlock->translation_.y, worldTransformBlock->translation_.z,
 			//    1.0f};
 			// 平行移動だけ代入
-			//worldTransformBlock->matWorld_ = result;
-			
+			// worldTransformBlock->matWorld_ = result;
+
 			// 定数バッファに転送する
 			/*worldTransformBlock->TransferMatrix();
 
-			Matrix4x4 matWorld = MakeAffineMatrix(worldTransformBlock->scale_, 
-				worldTransformBlock->rotation_, worldTransformBlock->translation_);
+			Matrix4x4 matWorld = MakeAffineMatrix(worldTransformBlock->scale_,
+			    worldTransformBlock->rotation_, worldTransformBlock->translation_);
 
 			worldTransformBlock->matWorld_ = matWorld;*/
 
@@ -87,6 +104,9 @@ void GameScene::Update() {
 			worldTransformBlock->UpdateMatrix();
 		}
 	}
+
+	// 天球の更新
+	skyDome_->Update();
 
 	// カメラの処理
 	if (isDebugCameraActive_) {
@@ -138,6 +158,9 @@ void GameScene::Draw() {
 			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
+
+	// スカイドームの辨官
+	skyDome_->Draw();
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
