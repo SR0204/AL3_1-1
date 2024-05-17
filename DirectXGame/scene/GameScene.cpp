@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "MathUtilityForText.h"
 #include "TextureManager.h"
 #include <cassert>
 
@@ -48,7 +49,7 @@ void GameScene::Initialize() {
 	// キューブの生成
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-			if ((i+j)%2==0)
+			if ((i + j) % 2 == 0)
 				continue;
 			worldTransformBlocks_[i][j] = new WorldTransform();
 			worldTransformBlocks_[i][j]->Initialize();
@@ -61,7 +62,7 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(1280, 720);
 }
 void GameScene::Update() {
-	// ブロックの更新   (これをコメントアウトしちゃうと実行したときに出てくるブロックが一個だけになる）
+	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
@@ -74,6 +75,12 @@ void GameScene::Update() {
 			worldTransformBlock->matWorld_ = result;
 			// 定数バッファに転送する
 			worldTransformBlock->TransferMatrix();
+
+			Matrix4x4 matWorld = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+
+			worldTransformBlock->matWorld_ = matWorld;
+			// アフィン返還と転送
+			worldTransformBlock->UpdateMatrix();
 		}
 	}
 
