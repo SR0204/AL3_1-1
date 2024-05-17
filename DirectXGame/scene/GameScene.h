@@ -10,7 +10,7 @@
 #include<vector>
 #include"DebugCamera.h"
 #include"Skydome.h"
-
+#include "Player.h"
 
 /// <summary>
 /// ゲームシーン
@@ -58,7 +58,8 @@ private: // メンバ変数
 	// 3Dモデルの生成
 	Model* model_ = nullptr;
 
-
+	// 自キャラ
+	Player* player_ = nullptr;
 	
 
 	// 3Dモデルデータ
