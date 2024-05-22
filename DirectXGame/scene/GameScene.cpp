@@ -18,9 +18,7 @@ GameScene::~GameScene() {
 	// デバッグカメラ
 	delete debugCamera_;
 
-	delete model_;
 
-	delete player_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -36,24 +34,6 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-
-
-	// テクスチャ読み込み
-	//textureHandle_ = TextureManager::Load("player.png");
-
-	// 3Dモデルの生成
-	model_ = Model::Create();
-
-	// ビュープロジェクション
-	viewProjection_.Initialize();
-
-	// 自キャラの生成
-	player_ = new Player();
-
-	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_, &viewProjection_);
-
-
 
 	// ビュープロジェクションの初期化
 	viewProjection_.farZ = 500;
@@ -128,9 +108,6 @@ void GameScene::Update() {
 		}
 	}
 
-	// 自キャラの更新
-	player_->Update();
-
 	// 天球の更新
 	skyDome_->Update();
 
@@ -184,10 +161,6 @@ void GameScene::Draw() {
 			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
-
-
-	// 自キャラの描画
-	player_->Draw();
 
 	// スカイドームの辨官
 	skyDome_->Draw();
