@@ -10,7 +10,7 @@
 #include<vector>
 #include"DebugCamera.h"
 #include"Skydome.h"
-
+#include "Player.h"
 
 /// <summary>
 /// ゲームシーン
@@ -59,7 +59,8 @@ private: // メンバ変数
 	Model* model_ = nullptr;
 
 
-	
+	// 自キャラ
+	Player* player_ = nullptr;
 
 	// 3Dモデルデータ
 	Model* modelBlock_ = nullptr;
@@ -70,6 +71,7 @@ private: // メンバ変数
 	//天球モデルデータ
 	Model* modelSkydome_ = nullptr;
 
+	Model* modelPlayer_ = nullptr;
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;

@@ -18,7 +18,9 @@ GameScene::~GameScene() {
 	// デバッグカメラ
 	delete debugCamera_;
 
+	delete player_;
 
+	delete model_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -35,9 +37,20 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	// テクスチャ読み込み
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
+
+	// 自キャラの生成
+	player_ = new Player();
+
+	// 自キャラの初期化
+	player_->Initialize(modelPlayer_, textureHandle_, &viewProjection_);
+
 	// ビュープロジェクションの初期化
-	viewProjection_.farZ = 500;
+	viewProjection_.farZ = 700;
 	viewProjection_.Initialize();
+
+
 
 	// 3Dモデルの生成
 	modelBlock_ = Model::Create();
@@ -108,6 +121,10 @@ void GameScene::Update() {
 		}
 	}
 
+
+	// 自キャラの更新
+	player_->Update();
+
 	// 天球の更新
 	skyDome_->Update();
 
@@ -168,6 +185,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+
+	// 自キャラの描画
+	player_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
