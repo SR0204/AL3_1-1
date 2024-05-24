@@ -11,6 +11,7 @@
 #include"DebugCamera.h"
 #include"Skydome.h"
 #include "Player.h"
+#include"MapChipField.h"
 
 /// <summary>
 /// ゲームシーン
@@ -42,6 +43,9 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw();
+
+
+	void GenerateBlocks();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -83,4 +87,9 @@ private: // メンバ変数
 
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
+
+	//マップチップフィールド
+	MapChipField* mapChipFiled_;
+
+
 };

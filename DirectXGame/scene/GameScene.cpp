@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "MapChipField.h"
 #include "MathUtilityForText.h"
 #include "Skydome.h"
 #include "TextureManager.h"
@@ -21,6 +22,9 @@ GameScene::~GameScene() {
 	delete player_;
 
 	delete model_;
+
+	// マップチップフィールドの解放
+	delete mapChipFiled_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -50,7 +54,11 @@ void GameScene::Initialize() {
 	viewProjection_.farZ = 700;
 	viewProjection_.Initialize();
 
+	// マップチップフィールドの初期化
+	mapChipFiled_ = new MapChipField;
+	mapChipFiled_->LoadMapChipCsv("Resources/blocks.csv");
 
+	GenerateBlocks();
 
 	// 3Dモデルの生成
 	modelBlock_ = Model::Create();
@@ -64,35 +72,12 @@ void GameScene::Initialize() {
 	// 天球の初期化
 	skyDome_->Initialize(modelSkydome_, &viewProjection_);
 
-	// 要素数
-	const uint32_t kNumBlockVirtical = 10;
-	const uint32_t kNumBlockHorizontal = 20;
-
-	// ブロック一個分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
-
-	// 要素数を変更する
-	worldTransformBlocks_.resize(kNumBlockVirtical);
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
-		// 1列の要素数を設定（横方向のブロック数）
-		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
-	}
-
-	// キューブの生成
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
-		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-			if ((i + j) % 2 == 0)
-				continue;
-			worldTransformBlocks_[i][j] = new WorldTransform();
-			worldTransformBlocks_[i][j]->Initialize();
-			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-			worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
-		}
-	}
-
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+
+	
+
+	
 }
 void GameScene::Update() {
 	// ブロックの更新
@@ -120,7 +105,6 @@ void GameScene::Update() {
 			worldTransformBlock->UpdateMatrix();
 		}
 	}
-
 
 	// 自キャラの更新
 	player_->Update();
@@ -205,4 +189,34 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+// マップチップ生成
+void GameScene::GenerateBlocks() {
+	// 要素数
+	const uint32_t kNumBlockVirtical = mapChipFiled_->GetNumBlockVirtical();
+	const uint32_t kNumBlockHorizontal = mapChipFiled_->GetNumBlockHorizontal();
+
+	// ブロック一個分の横幅
+	//const float kBlockWidth = 2.0f;
+	//const float kBlockHeight = 2.0f;
+	
+	// 要素数を変更する
+	worldTransformBlocks_.resize(kNumBlockVirtical);
+	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {
+		// 1列の要素数を設定（横方向のブロック数）
+		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
+	}
+
+	// キューブの生成
+	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {
+		for (uint32_t j = 0; j < kNumBlockHorizontal; j++) {
+			if (mapChipFiled_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlocks_[i][j] = worldTransform;
+				worldTransformBlocks_[i][j]->translation_ = mapChipFiled_->GetMapChipPositionByIndex(j, i);
+			}
+		}
+	}
 }
