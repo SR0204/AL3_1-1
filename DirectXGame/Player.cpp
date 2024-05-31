@@ -2,7 +2,7 @@
 #include <cassert>
 #include<numbers>
 #include<algorithm>
-
+#include"MathUtilityForText.h"
 
 void Player::Initialize(Model* model,ViewProjection* viewProjection, const Vector3& position) {
 
