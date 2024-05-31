@@ -15,3 +15,12 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vecto
 	return result;
 
 }
+
+Vector3& operator+=(Vector3& lhv, const Vector3& rhv) {
+	// TODO: return ステートメントをここに挿入します
+	lhv.x += rhv.x;
+	lhv.y += rhv.y;
+	lhv.z += rhv.z;
+
+	return lhv;
+}

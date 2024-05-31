@@ -47,8 +47,10 @@ void GameScene::Initialize() {
 	// 自キャラの生成
 	player_ = new Player();
 
+	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(20, 20);
+
 	// 自キャラの初期化
-	player_->Initialize(modelPlayer_, textureHandle_, &viewProjection_);
+	player_->Initialize(modelPlayer_, &viewProjection_,playerPosition);
 
 	// ビュープロジェクションの初期化
 	viewProjection_.farZ = 700;

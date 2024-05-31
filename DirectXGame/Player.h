@@ -18,7 +18,7 @@ public:
 	/// <param name="model"></param>
 	/// <param name="textureHandle"></param>
 	/// <param name="viewProjection"></param>
-	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection);
+	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 
 	///< summary>
 	/// 更新
@@ -44,4 +44,29 @@ private:
 	Player* player_ = nullptr;
 
 	ViewProjection* viewProjection_ = nullptr;
+
+	Vector3 velocity_ = {};
+
+	static inline const float kAcceleration = 1;
+
+	static inline const float kAttenuation = 1;
+
+	static inline const float kLimitRunSpeed = 1;
+
+	// 左右
+	enum class LRDirection {
+		kRight,
+		kLeft,
+	};
+
+	LRDirection lrDirection_ = LRDirection::kRight;
+
+	//旋回開始時の角度
+	float turnFirstRotationY_ = 0.0f;
+
+	//旋回タイマー	
+	float turnTimer_= 0.0f;
+
+	//旋回時間
+	static inline const float kTimeTurn = 0.3f;
 };
