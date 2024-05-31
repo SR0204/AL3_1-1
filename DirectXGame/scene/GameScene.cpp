@@ -47,8 +47,11 @@ void GameScene::Initialize() {
 	// 自キャラの生成
 	player_ = new Player();
 
+	//座標をマップチップ番号で指定
+	Vector3 playerPosition = mapChipFiled_->GetMapChipPositionByIndex(100, 100);
+
 	// 自キャラの初期化
-	player_->Initialize(modelPlayer_, textureHandle_, &viewProjection_);
+	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 
 	// ビュープロジェクションの初期化
 	viewProjection_.farZ = 700;
@@ -74,10 +77,6 @@ void GameScene::Initialize() {
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
-
-	
-
-	
 }
 void GameScene::Update() {
 	// ブロックの更新
@@ -198,9 +197,9 @@ void GameScene::GenerateBlocks() {
 	const uint32_t kNumBlockHorizontal = mapChipFiled_->GetNumBlockHorizontal();
 
 	// ブロック一個分の横幅
-	//const float kBlockWidth = 2.0f;
-	//const float kBlockHeight = 2.0f;
-	
+	// const float kBlockWidth = 2.0f;
+	// const float kBlockHeight = 2.0f;
+
 	// 要素数を変更する
 	worldTransformBlocks_.resize(kNumBlockVirtical);
 	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {

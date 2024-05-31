@@ -18,7 +18,7 @@ public:
 	/// <param name="model"></param>
 	/// <param name="textureHandle"></param>
 	/// <param name="viewProjection"></param>
-	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection);
+	void Initialize(Model* model,ViewProjection* viewProjection, const Vector3& position);
 
 	///< summary>
 	/// 更新
@@ -44,4 +44,11 @@ private:
 	Player* player_ = nullptr;
 
 	ViewProjection* viewProjection_ = nullptr;
+
+	Vector3 velocity_ = {};
+
+	static inline const float kAcceleration = 1.0f;
+
+	//static inline const float kLimitRunSpeed = 10;
+
 };
