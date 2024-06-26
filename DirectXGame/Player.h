@@ -31,6 +31,9 @@ public: // 引数を書くところ
 	/// </summary>
 	void Draw();
 
+	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
+
+
 private: // 関数（メンバ変数）
 	// ワールド変換データ
 	WorldTransform worldTransform_;

@@ -3,6 +3,7 @@
 #include "TextureManager.h"
 #include <cassert>
 
+
 // コンストラクタ
 GameScene::GameScene() {}
 
@@ -30,6 +31,9 @@ GameScene::~GameScene() {
 
 	// マップチップフィールドの開放
 	delete mapChipFiled_;
+
+	//カメラのビュープロジェクション
+	delete CameraViewProjection_;
 }
 
 void GameScene::Initialize() {
@@ -108,6 +112,15 @@ void GameScene::Initialize() {
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+
+	//カメラコントローラーの初期化
+		//カメラ生成
+	CameraViewProjection_ = new CameraController;
+
+	//カメラの初期化
+
+
+
 }
 
 void GameScene::Update() {
