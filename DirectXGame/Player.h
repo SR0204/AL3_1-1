@@ -41,6 +41,17 @@ private: // 関数（メンバ変数）
 	// 速度
 	Vector3 velocity_ = {};
 
+	// 角度補間
+
+	// 旋回開始時の角度
+	float turnFirstRotationY_ = 0.0f;
+
+	// 旋回タイマー
+	float turnTimer_ = 0.0f;
+
+	// 接地状態フラグ
+	bool onGround_ = true;
+
 	// 慣性移動
 	static inline const float kAcceleration = 0.01f;
 
@@ -52,26 +63,17 @@ private: // 関数（メンバ変数）
 
 	LRDirection lrDirection_ = LRDirection::kRight;
 
-	ViewProjection* viewProjection_ = nullptr;
-
-	//旋回開始時の角度
-	float turnFirstRotationY_ = 0.0f;
-
-	//旋回タイマー
-	float turnTimer_ = 0.0f;
-
-	//旋回時間
+	// 旋回時間＜秒＞
 	static inline const float kTimeTurn = 0.3f;
 
-	//接地フラグ
-	bool onGround_ = true;	
+	// 重力加速度（下方向）
+	static inline const float kGravityAcceleration = 0.05f;
 
-	//重力加速度(下)
-	static inline const float kGravityAcceleration = 1;
+	// 最大落下速度（下方向）
+	static inline const float kLimitFallSpeed = 0.5f;
 
-	//最大落下速度（下方向）
-	static inline const float kLimitFallSpeed = 1;
+	// ジャンプ初速（上方向）
+	static inline const float kJumpAcceleration = 0.5f;
 
-	//ジャンプ初速(上方向)
-	static inline const float kJumpAcceleration = 1;
+	ViewProjection* viewProjection_ = nullptr;
 };
