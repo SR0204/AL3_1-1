@@ -11,11 +11,16 @@ void CameraController::Initialize() {
 
 void CameraController::Update() {
 
+const Vector3& targetVelocity = target_->GetVelocity();
+
 	// 追従対象のワールドトランスフォームを参照
 	const WorldTransform& targetWorldTransform = target_->GetWorldTransform();
 
-	// 追従対象とオフセットからカメラの座標を計算
-	viewProjection_.translation_ = targetWorldTransform.translation_ + targetOffset_;
+	// 追従対象とオフセットと追従目標の速度からカメラの目標座標を計算
+	targetcoordinates_ = targetWorldTransform.translation_ + targetOffset_ + targetVelocity * kVelocityBias;
+
+	//座標補間によりゆったり追従
+	viewProjection_.translation_ = Lerp(viewProjection_.translation_, targetcoordinates_, kInterpolationRate);
 
 	//移動範囲制限
 	viewProjection_.translation_.x = std::max(viewProjection_.translation_.x, movableArea_.left);
@@ -26,6 +31,10 @@ void CameraController::Update() {
 
 	// 行列を更新する
 	viewProjection_.UpdateMatrix();
+
+
+	
+
 }
 
 void CameraController::Reset() {

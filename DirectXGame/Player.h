@@ -23,6 +23,8 @@ public: // 引数を書くところ
 
 	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
+	const Vector3& GetVelocity() const { return velocity_; }
+
 	/// <summary>
 	/// 更新処理
 	/// </summary>
