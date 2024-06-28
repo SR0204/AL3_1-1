@@ -21,6 +21,8 @@ public: // 引数を書くところ
 		kLeft,
 	};
 
+	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
+
 	/// <summary>
 	/// 更新処理
 	/// </summary>

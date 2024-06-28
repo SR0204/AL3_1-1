@@ -2,6 +2,7 @@
 #include "MathUtilityForText.h"
 #include "TextureManager.h"
 #include <cassert>
+#include"CameraController.h"
 
 
 // コンストラクタ
@@ -32,8 +33,8 @@ GameScene::~GameScene() {
 	// マップチップフィールドの開放
 	delete mapChipFiled_;
 
-	//カメラのビュープロジェクション
-	delete CameraViewProjection_;
+	//カメラ初期化
+	delete CameraController_;
 }
 
 void GameScene::Initialize() {
@@ -48,6 +49,7 @@ void GameScene::Initialize() {
 
 	mapChipFiled_ = new MapChipField;
 	mapChipFiled_->LoadMapChipCsv("Resources/blocks.csv");
+	
 
 	// 表示ブロックの生成
 	GenerateBlocks();
@@ -79,7 +81,7 @@ void GameScene::Initialize() {
 	skyDome_->Initialize(modelSkydome_, &viewProjection_);
 
 	// ブロックのモデルを読み込む
-	modelBlock_ = Model::CreateFromOBJ("cube", true);
+	modelBlock_ = Model::CreateFromOBJ("block", true);
 
 	// 要素数
 	// const uint32_t kNumBlockVirtical = 10;//10
@@ -113,14 +115,26 @@ void GameScene::Initialize() {
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
-	//カメラコントローラーの初期化
-		//カメラ生成
-	CameraViewProjection_ = new CameraController;
+	
+	//カメラコントローラーの生成
+	CameraController_ = new CameraController;
 
-	//カメラの初期化
+	//カメラ初期化
+	CameraController_->Initialize();
+
+	//追従対象をセット
+	CameraController_->SetTarget(player_);
+
+	// リセット
+	CameraController_->Reset();
 
 
 
+	//カメラ移動の範囲指定
+	Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	CameraController_->SetMovableArea(cameraArea);
+
+	
 }
 
 void GameScene::Update() {
@@ -159,6 +173,16 @@ void GameScene::Update() {
 	// デバッグカメラの更新
 	debugCamera_->Update();
 
+
+	//カメラコントローラー
+	CameraController_->Update();
+
+
+	
+
+
+
+
 #ifdef _DEBUG
 
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -174,9 +198,14 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
-		// ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
+		viewProjection_.matView = CameraController_->GetViewProjection().matView;
+		viewProjection_.matProjection = CameraController_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
+		
 	}
+
+	
 }
 
 void GameScene::Draw() {

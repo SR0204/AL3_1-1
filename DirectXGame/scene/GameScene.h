@@ -95,4 +95,6 @@ private: // メンバ変数
 	//カメラビュープロジェクション
 	ViewProjection* CameraViewProjection_;
 
+	//カメラコントローラー
+	CameraController* CameraController_;
 };
