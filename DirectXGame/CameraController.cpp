@@ -22,6 +22,13 @@ const Vector3& targetVelocity = target_->GetVelocity();
 	//座標補間によりゆったり追従
 	viewProjection_.translation_ = Lerp(viewProjection_.translation_, targetcoordinates_, kInterpolationRate);
 
+	//追従対象が画面外に出ないように補正
+	viewProjection_.translation_.x = std::max(viewProjection_.translation_.x, targetcoordinates_.x + Margin.left);
+	viewProjection_.translation_.x = std::min(viewProjection_.translation_.x, targetcoordinates_.x + Margin.right);
+	viewProjection_.translation_.y = std::max(viewProjection_.translation_.y, targetcoordinates_.y + Margin.bottom);
+	viewProjection_.translation_.y = std::min(viewProjection_.translation_.y, targetcoordinates_.y + Margin.top);
+
+
 	//移動範囲制限
 	viewProjection_.translation_.x = std::max(viewProjection_.translation_.x, movableArea_.left);
 	viewProjection_.translation_.x = std::min(viewProjection_.translation_.x, movableArea_.right);
