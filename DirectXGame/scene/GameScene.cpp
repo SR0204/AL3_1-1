@@ -63,6 +63,12 @@ void GameScene::Initialize() {
 	// ３Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
+	//マップチップフィールドの生成
+	mapChipFiled_ = new MapChipField();
+
+	//マップチップフィールドの初期化
+	mapChipFiled_->Initialize();
+
 	// プレイヤーモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
@@ -74,6 +80,9 @@ void GameScene::Initialize() {
 
 	// プレイヤーの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition); // 元player_->Initialize(modelPlayer_, &viewProjection_);
+
+	player_->SetMapChipField(mapChipFiled_);
+
 
 	// 天球の生成
 	skyDome_ = new Skydome();

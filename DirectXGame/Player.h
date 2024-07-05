@@ -2,6 +2,8 @@
 #include "Model.h"
 #include "WorldTransform.h"
 
+class MapChipField;
+
 /// <summary>
 ///	自キャラ
 /// </summary>
@@ -34,6 +36,43 @@ public: // 引数を書くところ
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
+
+	// キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
+	void InputMove();
+
+	void AnimateTurn();
+
+	//マップとの当たり判定情報
+	struct CollisionMapInfo {
+		bool Ceiling = false; // 天井衝突フラグ
+		bool landing = false; // 着地フラグ
+		bool HitWall = false; // 壁接触フラグ
+		Vector3 move;         // 移動量
+	};
+
+
+	void CheckMapCollision(CollisionMapInfo& info);
+	void CheckMapCollisionUp(CollisionMapInfo& info);
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+	void CheckMapCollisionRight(CollisionMapInfo& info);
+	void CheckMapCollisionLeft(CollisionMapInfo& info);
+
+	//角
+	enum Corner {
+		kRightBottom,//右下
+		kLeftBottom,//左下
+		kRightTop,//右上
+		kLeftTop,//左上
+
+		kNumCorner//要素数
+	};
+
+	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
 private: // 関数（メンバ変数）
 	// ワールド変換データ
@@ -80,4 +119,7 @@ private: // 関数（メンバ変数）
 	static inline const float kJumpAcceleration = 0.5f;
 
 	ViewProjection* viewProjection_ = nullptr;
+
+	// マップチップのフィールド
+	MapChipField* mapChipField_ = nullptr;
 };
