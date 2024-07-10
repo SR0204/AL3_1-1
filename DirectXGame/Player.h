@@ -57,6 +57,7 @@ public: // 引数を書くところ
 
 
 	void CheckMapCollision(CollisionMapInfo& info);
+
 	void CheckMapCollisionUp(CollisionMapInfo& info);
 	void CheckMapCollisionDown(CollisionMapInfo& info);
 	void CheckMapCollisionRight(CollisionMapInfo& info);

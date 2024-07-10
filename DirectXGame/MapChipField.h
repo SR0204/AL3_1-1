@@ -54,6 +54,13 @@ public:
 	uint32_t GetNumBlockVirtical() const { return kNumBlockVirtical; };
 	uint32_t GetNumBlockHorizontal() const{return kNumBlockHorizontal;};
 
+	struct IndexSet {
+		uint32_t xIndex;
+		uint32_t yIndex;
+	};
+
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
+
 private:
 	// 一ブロックのサイズ
 	static inline const float kBlockWidth = 1.0f;

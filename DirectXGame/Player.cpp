@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <cassert>
 #include <numbers>
+#include"MapChipField.h"
+
 /// <summary>
 /// 初期化
 /// </summary>
@@ -187,7 +189,12 @@ void Player::CheckMapCollision(CollisionMapInfo& info) {
 	CheckMapCollisionLeft(info);
 }
 
+// マップ衝突上判定
 void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
+	// 上昇あり？
+	if (info.move.y <= 0) {
+		return;
+	}
 
 	// 移動後の四つの角の座標
 	std::array<Vector3, kNumCorner> positionNew;
@@ -195,13 +202,57 @@ void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
+
+	MapChipType mapChipType;
+
+	//真上の当たり判定
+	bool hit = false;
+
+	//左上点の判定
+	MapChipField::IndexSet indexSet;
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kLeftTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
 }
 
-void Player::CheckMapCollisionDown(CollisionMapInfo& info) {}
+void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
 
-void Player::CheckMapCollisionRight(CollisionMapInfo& info) {}
+	
 
-void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {}
+	// 移動後の四つの角の座標
+	std::array<Vector3, kNumCorner> positionNew;
+
+	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	}
+
+}
+
+void Player::CheckMapCollisionRight(CollisionMapInfo& info) {
+
+	
+
+	// 移動後の四つの角の座標
+	std::array<Vector3, kNumCorner> positionNew;
+
+	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	}
+
+}
+
+void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
+
+	// 移動後の四つの角の座標
+	std::array<Vector3, kNumCorner> positionNew;
+
+	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	}
+
+}
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
