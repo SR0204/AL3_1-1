@@ -61,6 +61,16 @@ public:
 
 	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
 
+	//範囲矩形
+	struct Rect {
+		float left;//左端
+		float right;//右端
+		float bottom;//下端
+		float top;//上端
+	};
+
+	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
+
 private:
 	// 一ブロックのサイズ
 	static inline const float kBlockWidth = 1.0f;

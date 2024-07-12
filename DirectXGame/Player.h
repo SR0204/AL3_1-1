@@ -59,9 +59,9 @@ public: // 引数を書くところ
 	void CheckMapCollision(CollisionMapInfo& info);
 
 	void CheckMapCollisionUp(CollisionMapInfo& info);
-	void CheckMapCollisionDown(CollisionMapInfo& info);
+	/*void CheckMapCollisionDown(CollisionMapInfo& info);
 	void CheckMapCollisionRight(CollisionMapInfo& info);
-	void CheckMapCollisionLeft(CollisionMapInfo& info);
+	void CheckMapCollisionLeft(CollisionMapInfo& info);*/
 
 	//角
 	enum Corner {
@@ -74,6 +74,14 @@ public: // 引数を書くところ
 	};
 
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
+
+	static inline const float kBlank = 1.0f;
+
+	//判定結果を反映して移動させる
+	void CheckMapCollisionHit(const CollisionMapInfo& info);
+
+	//天井に接触している場合の処理
+	void CeilingContact(const CollisionMapInfo& info);
 
 private: // 関数（メンバ変数）
 	// ワールド変換データ

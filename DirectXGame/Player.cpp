@@ -1,11 +1,12 @@
 #define NOMINMAX
 #include "Player.h"
+#include "DebugText.h"
+#include "MapChipField.h"
 #include "MathUtilityFortext.h"
 #include <Input.h>
 #include <algorithm>
 #include <cassert>
 #include <numbers>
-#include"MapChipField.h"
 
 /// <summary>
 /// 初期化
@@ -37,11 +38,6 @@ void Player::Update() {
 	// 移動入力
 	InputMove();
 
-	AnimateTurn();
-
-	// 行列を更新して定数バッファに転送
-	worldTransform_.UpdateMatrix();
-
 	// 衝突情報の初期化
 	CollisionMapInfo collisionMapInfo;
 
@@ -50,6 +46,15 @@ void Player::Update() {
 
 	// マップ衝突チェック
 	CheckMapCollision(collisionMapInfo);
+
+	CheckMapCollisionHit(collisionMapInfo);
+
+	CeilingContact(collisionMapInfo);
+
+	AnimateTurn();
+
+	// 行列を更新して定数バッファに転送
+	worldTransform_.UpdateMatrix();
 }
 
 /// <summary>
@@ -184,9 +189,9 @@ void Player::AnimateTurn() {
 void Player::CheckMapCollision(CollisionMapInfo& info) {
 
 	CheckMapCollisionUp(info);
-	CheckMapCollisionDown(info);
+	/*CheckMapCollisionDown(info);
 	CheckMapCollisionRight(info);
-	CheckMapCollisionLeft(info);
+	CheckMapCollisionLeft(info);*/
 }
 
 // マップ衝突上判定
@@ -205,54 +210,66 @@ void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 
 	MapChipType mapChipType;
 
-	//真上の当たり判定
+	// 真上の当たり判定
 	bool hit = false;
 
-	//左上点の判定
+	// 左上点の判定
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
-}
 
-void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
-
-	
-
-	// 移動後の四つの角の座標
-	std::array<Vector3, kNumCorner> positionNew;
-
-	for (uint32_t i = 0; i < positionNew.size(); ++i) {
-		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	// 右上点の判定
+	// MapChipField::IndexSet indexSet2;
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
 	}
 
-}
-
-void Player::CheckMapCollisionRight(CollisionMapInfo& info) {
-
-	
-
-	// 移動後の四つの角の座標
-	std::array<Vector3, kNumCorner> positionNew;
-
-	for (uint32_t i = 0; i < positionNew.size(); ++i) {
-		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	// ブロックにヒット?
+	if (hit) {
+		// めり込みを排除する方向に移動量を設定する
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(0, +kHeight / 2.0f, 0));
+		// めり込み先ブロックの範囲矩形
+		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
+		// 天井に当たったことを記録する
+		info.Ceiling = true;
 	}
-
 }
 
-void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
-
-	// 移動後の四つの角の座標
-	std::array<Vector3, kNumCorner> positionNew;
-
-	for (uint32_t i = 0; i < positionNew.size(); ++i) {
-		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
-	}
-
-}
+// void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
+//
+//	// 移動後の四つの角の座標
+//	std::array<Vector3, kNumCorner> positionNew;
+//
+//	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+//		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+//	}
+// }
+//
+// void Player::CheckMapCollisionRight(CollisionMapInfo& info) {
+//
+//	// 移動後の四つの角の座標
+//	std::array<Vector3, kNumCorner> positionNew;
+//
+//	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+//		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+//	}
+// }
+//
+// void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
+//
+//	// 移動後の四つの角の座標
+//	std::array<Vector3, kNumCorner> positionNew;
+//
+//	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+//		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+//	}
+// }
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
@@ -264,4 +281,19 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 	};
 
 	return center + offsetTable[static_cast<uint32_t>(corner)];
+}
+
+void Player::CeilingContact(const CollisionMapInfo& info) {
+
+	// 天井に当たった？
+	if (info.Ceiling) {
+		DebugText::GetInstance()->ConsolePrintf("hit ceiling\n");
+		velocity_.y = 0;
+	}
+}
+
+void Player::CheckMapCollisionHit(const CollisionMapInfo& info) {
+
+	// 移動
+	worldTransform_.translation_ += info.move;
 }
