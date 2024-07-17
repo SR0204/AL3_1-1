@@ -1,9 +1,8 @@
 #include "GameScene.h"
+#include "CameraController.h"
 #include "MathUtilityForText.h"
 #include "TextureManager.h"
 #include <cassert>
-#include"CameraController.h"
-
 
 // コンストラクタ
 GameScene::GameScene() {}
@@ -33,7 +32,7 @@ GameScene::~GameScene() {
 	// マップチップフィールドの開放
 	delete mapChipFiled_;
 
-	//カメラ初期化
+	// カメラ初期化
 	delete CameraController_;
 }
 
@@ -48,8 +47,11 @@ void GameScene::Initialize() {
 	viewProjection_.farZ = 600; // これを５００とかにすると後ろの方ででっかい弾が出る。
 
 	mapChipFiled_ = new MapChipField;
+
+	// マップチップフィールドの初期化
+	mapChipFiled_->Initialize();
+
 	mapChipFiled_->LoadMapChipCsv("Resources/blocks.csv");
-	
 
 	// 表示ブロックの生成
 	GenerateBlocks();
@@ -63,11 +65,8 @@ void GameScene::Initialize() {
 	// ３Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
-	//マップチップフィールドの生成
-	mapChipFiled_ = new MapChipField();
-
-	//マップチップフィールドの初期化
-	mapChipFiled_->Initialize();
+	// マップチップフィールドの生成
+	// mapChipFiled_ = new MapChipField();
 
 	// プレイヤーモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
@@ -82,7 +81,6 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition); // 元player_->Initialize(modelPlayer_, &viewProjection_);
 
 	player_->SetMapChipField(mapChipFiled_);
-
 
 	// 天球の生成
 	skyDome_ = new Skydome();
@@ -124,26 +122,21 @@ void GameScene::Initialize() {
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
-	
-	//カメラコントローラーの生成
+	// カメラコントローラーの生成
 	CameraController_ = new CameraController;
 
-	//カメラ初期化
+	// カメラ初期化
 	CameraController_->Initialize();
 
-	//追従対象をセット
+	// 追従対象をセット
 	CameraController_->SetTarget(player_);
 
 	// リセット
 	CameraController_->Reset();
 
-
-
-	//カメラ移動の範囲指定
+	// カメラ移動の範囲指定
 	Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	CameraController_->SetMovableArea(cameraArea);
-
-	
 }
 
 void GameScene::Update() {
@@ -182,15 +175,8 @@ void GameScene::Update() {
 	// デバッグカメラの更新
 	debugCamera_->Update();
 
-
-	//カメラコントローラー
+	// カメラコントローラー
 	CameraController_->Update();
-
-
-	
-
-
-
 
 #ifdef _DEBUG
 
@@ -211,10 +197,7 @@ void GameScene::Update() {
 		viewProjection_.matProjection = CameraController_->GetViewProjection().matProjection;
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
-		
 	}
-
-	
 }
 
 void GameScene::Draw() {

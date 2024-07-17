@@ -47,6 +47,7 @@ void Player::Update() {
 	// マップ衝突チェック
 	CheckMapCollision(collisionMapInfo);
 
+	//判定結果を反映して移動させる
 	CheckMapCollisionHit(collisionMapInfo);
 
 	CeilingContact(collisionMapInfo);
@@ -189,9 +190,7 @@ void Player::AnimateTurn() {
 void Player::CheckMapCollision(CollisionMapInfo& info) {
 
 	CheckMapCollisionUp(info);
-	/*CheckMapCollisionDown(info);
-	CheckMapCollisionRight(info);
-	CheckMapCollisionLeft(info);*/
+	
 }
 
 // マップ衝突上判定
@@ -241,35 +240,7 @@ void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 	}
 }
 
-// void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
-//
-//	// 移動後の四つの角の座標
-//	std::array<Vector3, kNumCorner> positionNew;
-//
-//	for (uint32_t i = 0; i < positionNew.size(); ++i) {
-//		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
-//	}
-// }
-//
-// void Player::CheckMapCollisionRight(CollisionMapInfo& info) {
-//
-//	// 移動後の四つの角の座標
-//	std::array<Vector3, kNumCorner> positionNew;
-//
-//	for (uint32_t i = 0; i < positionNew.size(); ++i) {
-//		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
-//	}
-// }
-//
-// void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
-//
-//	// 移動後の四つの角の座標
-//	std::array<Vector3, kNumCorner> positionNew;
-//
-//	for (uint32_t i = 0; i < positionNew.size(); ++i) {
-//		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
-//	}
-// }
+
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
