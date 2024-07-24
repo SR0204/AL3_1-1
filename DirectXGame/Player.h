@@ -47,7 +47,7 @@ public: // 引数を書くところ
 
 	void AnimateTurn();
 
-	//マップとの当たり判定情報
+	// マップとの当たり判定情報
 	struct CollisionMapInfo {
 		bool Ceiling = false; // 天井衝突フラグ
 		bool landing = false; // 着地フラグ
@@ -55,33 +55,37 @@ public: // 引数を書くところ
 		Vector3 move;         // 移動量
 	};
 
-
 	void CheckMapCollision(CollisionMapInfo& info);
 
 	void CheckMapCollisionUp(CollisionMapInfo& info);
-	/*void CheckMapCollisionDown(CollisionMapInfo& info);
-	void CheckMapCollisionRight(CollisionMapInfo& info);
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+	/*void CheckMapCollisionRight(CollisionMapInfo& info);
 	void CheckMapCollisionLeft(CollisionMapInfo& info);*/
 
-	//角
+	// 角
 	enum Corner {
-		kRightBottom,//右下
-		kLeftBottom,//左下
-		kRightTop,//右上
-		kLeftTop,//左上
+		kRightBottom, // 右下
+		kLeftBottom,  // 左下
+		kRightTop,    // 右上
+		kLeftTop,     // 左上
 
-		kNumCorner//要素数
+		kNumCorner // 要素数
 	};
 
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
 	static inline const float kBlank = 1.0f;
 
-	//判定結果を反映して移動させる
+	// 判定結果を反映して移動させる
 	void CheckMapCollisionHit(const CollisionMapInfo& info);
 
-	//天井に接触している場合の処理
+	// 天井に接触している場合の処理
 	void CeilingContact(const CollisionMapInfo& info);
+
+	// 接地状態の切り替え
+	void GroundedCondition(const CollisionMapInfo& info);
+
+	
 
 private: // 関数（メンバ変数）
 	// ワールド変換データ
@@ -131,4 +135,7 @@ private: // 関数（メンバ変数）
 
 	// マップチップのフィールド
 	MapChipField* mapChipField_ = nullptr;
+
+	// 着地時の速度減衰率
+	static inline const float kAttenuationLanding = 1.0f;
 };
