@@ -34,6 +34,9 @@ GameScene::~GameScene() {
 
 	// カメラ初期化
 	delete CameraController_;
+
+	
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
@@ -137,6 +140,11 @@ void GameScene::Initialize() {
 	// カメラ移動の範囲指定
 	Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	CameraController_->SetMovableArea(cameraArea);
+
+	//敵初期化
+	enemy_ = new Enemy();
+
+	enemy_->Initialize();
 }
 
 void GameScene::Update() {
@@ -241,6 +249,9 @@ void GameScene::Draw() {
 			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
+
+
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

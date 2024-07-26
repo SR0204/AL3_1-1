@@ -13,6 +13,7 @@
 #include "Player.h"
 #include"MapChipField.h"
 #include"CameraController.h"
+#include"Enemy.h"
 
 /// <summary>
 /// ゲームシーン
@@ -97,4 +98,7 @@ private: // メンバ変数
 
 	//カメラコントローラー
 	CameraController* CameraController_;
+
+	//敵
+	Enemy* enemy_ = nullptr;
 };

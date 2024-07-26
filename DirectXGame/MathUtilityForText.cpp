@@ -1,6 +1,6 @@
 #include "MathUtilityForText.h"
-#include<numbers>
-#include<cmath>
+#include <cmath>
+#include <numbers>
 
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate) {
 
@@ -23,6 +23,12 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vecto
 
 	// 平行移動行列の作成
 	Matrix4x4 TranslateMat = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, translate.x, translate.y, translate.z, 1};
+
+	// X回転
+	Matrix4x4 RotateMatX = {1, 0, 0, 0, 0, cosf(rot.x), sinf(rot.x), 0, 0, -sinf(rot.x), cosf(rot.x), 0, 0, 0, 0, 1};
+
+	// X軸回転*Y軸回転で回転行列を合成
+	Matrix4x4 RotateMatAll = MatrixMultiply(RotateMatX, RotateMatY);
 
 	// 回転*平行移動だけでワールド変換行列に
 	Matrix4x4 ansMat = MatrixMultiply(RotateMatY, TranslateMat);
@@ -53,7 +59,6 @@ Matrix4x4 MatrixMultiply(Matrix4x4& m1, Matrix4x4& m2) {
 
 	result.m[0][3] = m1.m[0][0] * m2.m[0][3] + m1.m[0][1] * m2.m[1][3] + m1.m[0][2] * m2.m[2][3] + m1.m[0][3] * m2.m[3][3];
 
-
 	result.m[1][0] = m1.m[1][0] * m2.m[0][0] + m1.m[1][1] * m2.m[1][0] + m1.m[1][2] * m2.m[2][0] + m1.m[1][3] * m2.m[3][0];
 
 	result.m[1][1] = m1.m[1][0] * m2.m[0][1] + m1.m[1][1] * m2.m[1][1] + m1.m[1][2] * m2.m[2][1] + m1.m[1][3] * m2.m[3][1];
@@ -62,8 +67,6 @@ Matrix4x4 MatrixMultiply(Matrix4x4& m1, Matrix4x4& m2) {
 
 	result.m[1][3] = m1.m[1][0] * m2.m[0][3] + m1.m[1][1] * m2.m[1][3] + m1.m[1][2] * m2.m[2][3] + m1.m[1][3] * m2.m[3][3];
 
-
-
 	result.m[2][0] = m1.m[2][0] * m2.m[0][0] + m1.m[2][1] * m2.m[1][0] + m1.m[2][2] * m2.m[2][0] + m1.m[2][3] * m2.m[3][0];
 
 	result.m[2][1] = m1.m[2][0] * m2.m[0][1] + m1.m[2][1] * m2.m[1][1] + m1.m[2][2] * m2.m[2][1] + m1.m[2][3] * m2.m[3][1];
@@ -71,8 +74,6 @@ Matrix4x4 MatrixMultiply(Matrix4x4& m1, Matrix4x4& m2) {
 	result.m[2][2] = m1.m[2][0] * m2.m[0][2] + m1.m[2][1] * m2.m[1][2] + m1.m[2][2] * m2.m[2][2] + m1.m[2][3] * m2.m[3][2];
 
 	result.m[2][3] = m1.m[2][0] * m2.m[0][3] + m1.m[2][1] * m2.m[1][3] + m1.m[2][2] * m2.m[2][3] + m1.m[2][3] * m2.m[3][3];
-
-
 
 	result.m[3][0] = m1.m[3][0] * m2.m[0][0] + m1.m[3][1] * m2.m[1][0] + m1.m[3][2] * m2.m[2][0] + m1.m[3][3] * m2.m[3][0];
 
@@ -83,11 +84,11 @@ Matrix4x4 MatrixMultiply(Matrix4x4& m1, Matrix4x4& m2) {
 	result.m[3][3] = m1.m[3][0] * m2.m[0][3] + m1.m[3][1] * m2.m[1][3] + m1.m[3][2] * m2.m[2][3] + m1.m[3][3] * m2.m[3][3];
 
 	/*for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			for (int x = 0; x < 4; x++) {
-				result.m[i][j] += m1.m[i][x] * m2.m[x][j];
-			}
-		}
+	    for (int j = 0; j < 4; j++) {
+	        for (int x = 0; x < 4; x++) {
+	            result.m[i][j] += m1.m[i][x] * m2.m[x][j];
+	        }
+	    }
 	}*/
 
 	return result;
@@ -100,10 +101,10 @@ float EaseInOut(float x1, float x2, float t) {
 
 float Lerp(float x1, float x2, float t) { return (1.0f - t) * x1 + t * x2; }
 
-Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t) { return Vector3(Lerp(v1.x,v2.x,t),Lerp(v1.y,v2.y,t),Lerp(v1.z,v2.z,t)); }
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t) { return Vector3(Lerp(v1.x, v2.x, t), Lerp(v1.y, v2.y, t), Lerp(v1.z, v2.z, t)); }
 
-const Vector3 operator+(const Vector3& v1, const Vector3& v2) { 
-	Vector3 temp(v1); 
+const Vector3 operator+(const Vector3& v1, const Vector3& v2) {
+	Vector3 temp(v1);
 	return temp += v2;
 }
 
@@ -116,13 +117,9 @@ Vector3& operator*=(Vector3& v, float s) {
 	return v;
 }
 
-const Vector3 operator*(const Vector3& v, float s) { 
-	
+const Vector3 operator*(const Vector3& v, float s) {
+
 	Vector3 temp(v);
 
 	return temp *= s;
 }
-
-
-
-
