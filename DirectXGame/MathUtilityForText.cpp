@@ -31,7 +31,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vecto
 	Matrix4x4 RotateMatAll = MatrixMultiply(RotateMatX, RotateMatY);
 
 	// 回転*平行移動だけでワールド変換行列に
-	Matrix4x4 ansMat = MatrixMultiply(RotateMatY, TranslateMat);
+	Matrix4x4 ansMat = MatrixMultiply(RotateMatAll, TranslateMat);
 
 	return ansMat;
 }

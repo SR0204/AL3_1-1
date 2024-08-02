@@ -35,7 +35,7 @@ GameScene::~GameScene() {
 	// カメラ初期化
 	delete CameraController_;
 
-	
+	// 敵
 	delete enemy_;
 }
 
@@ -141,10 +141,14 @@ void GameScene::Initialize() {
 	Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	CameraController_->SetMovableArea(cameraArea);
 
-	//敵初期化
+	// 敵初期化
+	enemyModel_ = Model::CreateFromOBJ("enemy", true);
+
+	Vector3 enemyPosition = mapChipFiled_->GetMapChipPositionByIndex(20, 18);
+
 	enemy_ = new Enemy();
 
-	enemy_->Initialize();
+	enemy_->Initialize(enemyModel_, &viewProjection_, enemyPosition);
 }
 
 void GameScene::Update() {
@@ -154,6 +158,9 @@ void GameScene::Update() {
 
 	// 天球の更新
 	skyDome_->Update();
+
+	// 敵
+	enemy_->Update();
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -241,6 +248,9 @@ void GameScene::Draw() {
 	// 天球の描画処理
 	skyDome_->Draw();
 
+	// 敵
+	enemy_->Draw();
+
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -249,9 +259,6 @@ void GameScene::Draw() {
 			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
-
-
-
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
