@@ -1,8 +1,12 @@
 #pragma once
 #include "Model.h"
 #include "WorldTransform.h"
+#include"AABB.h"
+
 
 class MapChipField;
+
+class Enemy;
 
 /// <summary>
 ///	自キャラ
@@ -40,8 +44,8 @@ public: // 引数を書くところ
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
 	// キャラクターの当たり判定サイズ
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
+	static inline const float kWidth = 0.8f;//横幅
+	static inline const float kHeight = 0.8f;//縦幅
 
 	void InputMove();
 
@@ -85,7 +89,14 @@ public: // 引数を書くところ
 	// 接地状態の切り替え
 	void GroundedCondition(const CollisionMapInfo& info);
 
-	
+	//ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	// AABBを取得
+	AABB GetAABB();
+
+	// 衝突応答
+	void OnCollision(const Enemy* enemy);
 
 private: // 関数（メンバ変数）
 	// ワールド変換データ
@@ -139,4 +150,6 @@ private: // 関数（メンバ変数）
 	// 着地時の速度減衰率
 	static inline const float kAttenuationLanding = 0.5f;
 	static inline const float kAttenuationShift = 0.1f;
+
+	
 };

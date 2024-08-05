@@ -29,3 +29,5 @@ Vector3& operator*=(Vector3& v, float s);
 // 2項演算子のオーバーロード
 // Vector3の掛け算
 const Vector3 operator*(const Vector3& v, float s);
+
+bool IsCollision(const AABB& aabb1, const AABB& aabb2);

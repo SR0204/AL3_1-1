@@ -1,8 +1,11 @@
 #pragma once
-#include"Model.h"
+#include "AABB.h"
+#include "Model.h"
 #include "WorldTransform.h"
-class Enemy {
 
+class Player;
+
+class Enemy {
 
 public:
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
@@ -11,33 +14,42 @@ public:
 
 	void Draw();
 
-private:
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
 
-	//ワールドトランスフォーム(敵の座標)
+	// AABBを取得
+	AABB GetAABB();
+
+	// 衝突応答
+	void OnCollision(const Player* player);
+
+	
+
+private:
+	// ワールドトランスフォーム(敵の座標)
 	WorldTransform worldTransform_;
 
-	//モデル
+	// モデル
 	Model* model_ = nullptr;
 
-
-	//ビュープロジェクション
+	// ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
 
-	//歩行の速さ
+	// 歩行の速さ
 	static inline const float kWalkSpeed = 0.01f;
 
-	//速度
+	// 速度
 	Vector3 velocity_ = {};
 
-	//最初の角度（度）
-	static inline const float kWalkMotionAngleStart =0.01f;
+	// 最初の角度（度）
+	static inline const float kWalkMotionAngleStart = 0.01f;
 
-	//最後の角度(度)
+	// 最後の角度(度)
 	static inline const float kWalkMotionAngleEnd = 0.1f;
 
-	//アニメーションの周期となる時間[秒]
-	static inline const float kWalkMotionTime = 5.0f;
+	// アニメーションの周期となる時間[秒]
+	static inline const float kWalkMotionTime = 3.0f;
 
-	//経過時間
-	float walkTimer_ = 0.0f;	
+	// 経過時間
+	float walkTimer_ = 0.0f;
 };

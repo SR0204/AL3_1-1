@@ -288,7 +288,7 @@ void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
 	}
 }
 
-//右
+// 右
 void Player::CheckMapCollisionRight(CollisionMapInfo& info) {
 
 	// 右あり？
@@ -327,17 +327,13 @@ void Player::CheckMapCollisionRight(CollisionMapInfo& info) {
 	// ブロックにヒット?
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
-		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(+kWidth / 2.0f, 0,0));
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(+kWidth / 2.0f, 0, 0));
 		// めり込み先ブロックの範囲矩形
 		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.move.x = std::max(0.0f, rect.right - worldTransform_.translation_.x - (kWidth / 2.0f + kBlank));
 		// 天井に当たったことを記録する
 		info.Ceiling = true;
 	}
-
-
-
-
 }
 
 void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
@@ -384,7 +380,6 @@ void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
 		// 天井に当たったことを記録する
 		info.Ceiling = true;
 	}
-
 }
 
 // 接地状態
@@ -448,6 +443,39 @@ void Player::GroundedCondition(const CollisionMapInfo& info) {
 	}
 }
 
+Vector3 Player::GetWorldPosition() {
+
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+
+	//ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
+AABB Player::GetAABB() {
+
+Vector3 worldPos = GetWorldPosition();
+
+AABB aabb;
+
+aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+return aabb;
+}
+
+void Player::OnCollision(const Enemy* enemy) {
+	(void)enemy;
+
+	// ジャンプ開始(仮処理)
+	velocity_ += Vector3(1);
+
+}
+
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
 	Vector3 offsetTable[kNumCorner] = {
@@ -474,3 +502,5 @@ void Player::CheckMapCollisionHit(const CollisionMapInfo& info) {
 	// 移動
 	worldTransform_.translation_ += info.move;
 }
+
+
