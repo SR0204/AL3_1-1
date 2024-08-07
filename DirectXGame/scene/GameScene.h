@@ -1,30 +1,34 @@
 #pragma once
 
 #include "Audio.h"
+#include "CameraController.h"
+#include "DebugCamera.h"
 #include "DirectXCommon.h"
+#include "Enemy.h"
 #include "Input.h"
+#include "MapChipField.h"
 #include "Model.h"
+#include "Player.h"
+#include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include<vector>
-#include"DebugCamera.h"
-#include"Skydome.h"
-#include "Player.h"
-#include"MapChipField.h"
-#include"CameraController.h"
-#include"Enemy.h"
-
+#include <vector>
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
 
-public: // メンバ関数
+public: // メンバ関数(引数）
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
 	GameScene();
+
+	// 敵
+	// Enemy* enemy_ = nullptr;
+
+	Model* EnemyModel_ = nullptr;
 
 	/// <summary>
 	/// デストラクタ
@@ -46,66 +50,61 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-
 	void GenerateBlocks();
 
-	//全ての当たり判定を行う
+	// 全ての当たり判定を行う
 	void CheckAllCollisions();
 
-private: // メンバ変数
+private: // メンバ変数（関数）
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
-	/// <summary>
-	/// ゲームシーン用
-	/// </summary>
-	
-	/// ゲームシーン用
-	uint32_t textureHandle_ = 0;
+	// マップチップフィールド
+	MapChipField* mapChipField_;
+
+	// ビュープロジェクション生成
+	ViewProjection viewProjection_;
 
 	// 3Dモデルの生成
 	Model* model_ = nullptr;
 
-
-	// 自キャラ
+	// プレイヤーの生成
 	Player* player_ = nullptr;
 
-	// 3Dモデルデータ
-	Model* modelBlock_ = nullptr;
+	// 天球の生成
+	Skydome* skydome_ = nullptr;
 
-	//天球
-	Skydome* skyDome_ = nullptr;
-
-	//天球モデルデータ
+	// 3Dモデル
 	Model* modelSkydome_ = nullptr;
 
+	// プレイヤーモデル
 	Model* modelPlayer_ = nullptr;
 
-	// ビュープロジェクション
-	ViewProjection viewProjection_;
+	// テクスチャハンドル
+	uint32_t textureHandle_ = 0;
+
+	// ブロックのモデルを読み込む
+	Model* modelBlock_ = 0;
 
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
-	//デバッグカメラ有効
+	// 敵の複数化
+	std::list<Enemy*> enemies_;
+
+	// 敵
+	Model* modelEnemy_;
+
+	// デバッグカメラの有効
 	bool isDebugCameraActive_ = false;
 
-	//デバッグカメラ
+	// デバッグカメラの生成
 	DebugCamera* debugCamera_ = nullptr;
 
-	//マップチップフィールド
-	MapChipField* mapChipFiled_;
+	// カメラコントローラー
+	CameraController* cameraController_;
 
-	//カメラビュープロジェクション
-	ViewProjection* CameraViewProjection_;
-
-	//カメラコントローラー
-	CameraController* CameraController_;
-
-	//敵
-	Enemy* enemy_ = nullptr;
-
-	Model* enemyModel_ = nullptr;
-
-	std::list<Enemy*> enemies_;
+	/// <summary>
+	/// ゲームシーン用
+	/// </summary>
 };
