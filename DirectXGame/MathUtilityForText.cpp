@@ -1,4 +1,5 @@
 #include "MathUtilityforText.h"
+#include <assert.h>
 #include <cmath>
 #include <numbers>
 
@@ -61,6 +62,24 @@ Vector3& operator*=(Vector3& v, float s) {
 const Vector3 operator*(const Vector3& v, float s) {
 	Vector3 temp(v);
 	return temp *= s;
+}
+
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
+
+	Vector3 result;
+
+	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
+	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
+	result.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] + 1.0f * matrix.m[3][2];
+
+	float w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] + 1.0f * matrix.m[3][3];
+
+	assert(w != 0.0f);
+
+	result.x /= w;
+	result.y /= w;
+	result.z /= w;
+	return result;
 }
 
 // 行列の掛け算
@@ -152,12 +171,22 @@ Matrix4x4 MakeRotateYMatrix(float radian) {
 	return ret;
 }
 // 3.Z軸回転行列
-Matrix4x4 MakeRotateZMatrix(float radian) {
-	Matrix4x4 ret{
-	    std::cos(radian), std::sin(radian), 0.0f, 0.0f, std::sin(-radian), std::cos(radian), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-	};
-	return ret;
+//Matrix4x4 MakeRotateZMatrix(float radian) {
+//	Matrix4x4 ret{
+//	    std::cos(radian), std::sin(radian), 0.0f, 0.0f, std::sin(-radian), std::cos(radian), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+//	};
+//	return ret;
+//}
+
+Matrix4x4 MakeRotateZMatrix(float theta) {
+
+	float sin = std::sin(theta);
+	float cos = std::cos(theta);
+	Matrix4x4 result{cos, sin, 0.0f, 0.0f, -sin, cos, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+
+	return result;
 }
+
 
 float EaseInOut(float x1, float x2, float t) {
 	float easeT = -(std::cosf(std::numbers::pi_v<float> * t) - 1.0f) / 2.0f;
@@ -173,6 +202,10 @@ bool IsColision(const AABB& aabb1, const AABB& aabb2) {
 	       (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && // Y軸
 	       (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z);   // Z軸
 }
+
+
+
+
 
 // 3次元アフィン変換行列
 // Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);

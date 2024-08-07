@@ -41,6 +41,8 @@ GameScene::~GameScene() {
 
 	// マップチップフィールドの開放
 	delete mapChipField_;
+
+	delete deathParticleModel_;
 }
 
 void GameScene::Initialize() {
@@ -64,6 +66,15 @@ void GameScene::Initialize() {
 	// enemy_ = new Enemy();
 
 	// enemy_->Initialize(EnemyModel_, &viewProjection_, enemyPosition);
+
+	// 仮の生成処理。後で消す
+
+	Vector3 DeathParticlePosition = mapChipField_->GetMapChipPositionByIndex(3, 18);
+
+	deathParticleModel_ = Model::CreateFromOBJ("deathParticle", true);
+
+	deathParticles_ = new DeathParticles;
+	deathParticles_->Initialize(deathParticleModel_, &viewProjection_, DeathParticlePosition);
 
 	// 敵の生成
 	for (int32_t i = 0; i < 3; ++i) {
@@ -93,7 +104,7 @@ void GameScene::Initialize() {
 	player_ = new Player();
 
 	// 座標をマップチップ番号で指定
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(7, 7);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(3, 18);
 
 	// プレイヤーの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition); // 元player_->Initialize(modelPlayer_, &viewProjection_);
@@ -169,9 +180,13 @@ void GameScene::Update() {
 	// 全ての当たり判定を行う
 	CheckAllCollisions();
 
+	//敵の更新
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
 	}
+
+	//デスパーティクル
+	deathParticles_->Update();
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -262,6 +277,8 @@ void GameScene::Draw() {
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}
+
+	deathParticles_->Draw();
 
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {

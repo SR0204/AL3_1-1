@@ -14,6 +14,9 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <vector>
+#include"DeathParticles.h"
+
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -103,6 +106,10 @@ private: // メンバ変数（関数）
 
 	// カメラコントローラー
 	CameraController* cameraController_;
+
+	DeathParticles* deathParticles_ = nullptr;
+
+	Model* deathParticleModel_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用
