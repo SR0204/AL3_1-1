@@ -489,4 +489,6 @@ void Player::OnCollision(const Enemy* enemy) {
 	velocity_.y = 1;
 
 	(void)enemy;
+
+	isDead_ = true;
 }

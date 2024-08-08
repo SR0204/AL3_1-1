@@ -16,6 +16,9 @@ public:
 
 	void Draw();
 
+	// デスフラグのgeeter
+	bool IsFinished() const { return finished_; }
+
 private:
 	// パーティクルの個数
 	static inline const uint32_t kNumParticles = 8;
@@ -47,4 +50,7 @@ private:
 
 	//色の数値
 	Vector4 color_;
+
+	// 終了フラグ
+	bool finished_ = false;
 };

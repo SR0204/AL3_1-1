@@ -96,6 +96,10 @@ public: // 引数を書くところ
 	// AABBを取得
 	AABB GetAABB();
 
+	// デスフラグのgetter
+	bool IsDead() const { return isDead_; }
+
+
 private: // 関数（メンバ変数）
 	// マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
@@ -149,6 +153,9 @@ private: // 関数（メンバ変数）
 	static inline const float kAttennuationLanding = 0.5f;
 
 	static inline const float kAttennuationShift = 0.1f;
+
+	// デスフラグ
+	bool isDead_ = false;
 
 	ViewProjection* viewProjection_ = nullptr;
 };

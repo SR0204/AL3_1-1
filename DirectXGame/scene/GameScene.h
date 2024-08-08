@@ -15,7 +15,7 @@
 #include "WorldTransform.h"
 #include <vector>
 #include"DeathParticles.h"
-
+#include"TitleScene.h"
 
 /// <summary>
 /// ゲームシーン
@@ -57,6 +57,22 @@ public: // メンバ関数(引数）
 
 	// 全ての当たり判定を行う
 	void CheckAllCollisions();
+
+	//ゲームのフェーズ(型)
+	enum class Phase {
+
+		kPlay, //ゲームプレイ
+		kDeath,//デス演出
+	};
+
+	//フェーズ切り替え
+	void ChangePhase();
+
+	// デスフラグのgetter
+	bool IsDead() const { return isDead_; }
+
+	//デスフラグのgeeter
+	bool IsFinished() const { return finished_; }
 
 private: // メンバ変数（関数）
 	DirectXCommon* dxCommon_ = nullptr;
@@ -110,6 +126,15 @@ private: // メンバ変数（関数）
 	DeathParticles* deathParticles_ = nullptr;
 
 	Model* deathParticleModel_ = nullptr;
+
+	//ゲームの現在のフェーズ(変数)
+	Phase phase_;
+
+	// デスフラグ
+	bool isDead_ = false;
+
+	//終了フラグ
+	bool finished_ = false;
 
 	/// <summary>
 	/// ゲームシーン用
