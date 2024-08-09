@@ -17,7 +17,7 @@ public:
 	void Draw();
 
 	// デスフラグのgeeter
-	bool IsFinished() const { return finished_; }
+	bool IsFinished() const { return isFinished_; }
 
 private:
 	// パーティクルの個数
@@ -52,5 +52,5 @@ private:
 	Vector4 color_;
 
 	// 終了フラグ
-	bool finished_ = false;
+	//bool finished_ = false;
 };

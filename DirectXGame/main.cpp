@@ -38,8 +38,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	AxisIndicator* axisIndicator = nullptr;
 	PrimitiveDrawer* primitiveDrawer = nullptr;
 
-	
-
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
 	win->CreateGameWindow(L"LE2D_13_スズキ_レオ_AL3");
@@ -100,16 +98,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ChangeScene();
 		// 現在シーン更新
 		Updatescene();
-		// titleScene->Draw();
-		// 現在シーン描画
-		DrawScene();
 
 		// ImGui受付開始
 		imguiManager->Begin();
 		// 入力関連の毎フレーム処理
 		input->Update();
 		// ゲームシーンの毎フレーム処理
-		gameScene->Update();
+		// gameScene->Update();
 		// 軸表示の更新
 		axisIndicator->Update();
 		// ImGui受付終了
@@ -117,8 +112,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		// 描画開始
 		dxCommon->PreDraw();
+
 		// ゲームシーンの描画
-		gameScene->Draw();
+		// gameScene->Draw();
+		// titleScene->Draw();
+
+		// 現在シーン描画
+		DrawScene();
 		// 軸表示の描画
 		axisIndicator->Draw();
 		// プリミティブ描画のリセット
@@ -143,6 +143,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	win->TerminateGameWindow();
 
 	return 0;
+}
+
+void Updatescene() {
+
+	switch (scene) {
+
+	case Scene::kTitle:
+
+		titleScene->Update();
+
+		break;
+	case Scene::kGame:
+
+		gameScene->Update();
+		break;
+	}
+}
+
+void DrawScene() {
+
+	switch (scene) {
+
+	case Scene::kTitle:
+
+		titleScene->Draw();
+
+		break;
+	case Scene::kGame:
+
+		gameScene->Draw();
+		break;
+	}
 }
 
 void ChangeScene() {
@@ -177,38 +209,6 @@ void ChangeScene() {
 			titleScene->Initialize();
 		}
 
-		break;
-	}
-}
-
-void Updatescene() {
-
-	switch (scene) {
-
-	case Scene::kTitle:
-
-		titleScene->Update();
-
-		break;
-	case Scene::kGame:
-
-		gameScene->Update();
-		break;
-	}
-}
-
-void DrawScene() {
-
-	switch (scene) {
-
-	case Scene::kTitle:
-
-		titleScene->Draw();
-
-		break;
-	case Scene::kGame:
-
-		gameScene->Draw();
 		break;
 	}
 }

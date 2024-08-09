@@ -26,14 +26,14 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vecto
 	Matrix4x4 RotateMatAll = MatrixMultiply(RotateMatX, RotateMatY);
 
 	// 回転＊平行移動だけをワールド変換行列に
-	Matrix4x4 ansMat = MatrixMultiply(RotateMatAll, TranslateMat);
+	//Matrix4x4 ansMat = MatrixMultiply(RotateMatAll, TranslateMat);
 
-	//スケール
-	//Matrix4x4 ScallMat = {scale.x, 0, 0, 0, scale.y, 0, 0, 0, 0, scale.z, 0, 0, 0, 0, 1};
+	// スケール
+	Matrix4x4 ScallMat = {scale.x, 0, 0, 0, 0, scale.y, 0, 0, 0, 0, scale.z, 0, 0, 0, 0, 1};
 
-	//拡大＊回転＊平行移動でワールド変換行列に
-	/*Matrix4x4 ansMat = MatrixMultiply(ScallMat, RotateMatAll);
-	ansMat = MatrixMultiply(ansMat, TranslateMat);*/
+	// 拡大＊回転＊平行移動でワールド変換行列に
+	Matrix4x4 ansMat = MatrixMultiply(ScallMat, RotateMatAll);
+	ansMat = MatrixMultiply(ansMat, TranslateMat);
 
 	return ansMat;
 
@@ -178,7 +178,7 @@ Matrix4x4 MakeRotateYMatrix(float radian) {
 	return ret;
 }
 // 3.Z軸回転行列
-//Matrix4x4 MakeRotateZMatrix(float radian) {
+// Matrix4x4 MakeRotateZMatrix(float radian) {
 //	Matrix4x4 ret{
 //	    std::cos(radian), std::sin(radian), 0.0f, 0.0f, std::sin(-radian), std::cos(radian), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
 //	};
@@ -194,7 +194,6 @@ Matrix4x4 MakeRotateZMatrix(float theta) {
 	return result;
 }
 
-
 float EaseInOut(float x1, float x2, float t) {
 	float easeT = -(std::cosf(std::numbers::pi_v<float> * t) - 1.0f) / 2.0f;
 	return Lerp(x1, x2, easeT);
@@ -209,10 +208,6 @@ bool IsColision(const AABB& aabb1, const AABB& aabb2) {
 	       (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && // Y軸
 	       (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z);   // Z軸
 }
-
-
-
-
 
 // 3次元アフィン変換行列
 // Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);

@@ -20,6 +20,7 @@ class TitleScene {
 public:
 	TitleScene();
 	~TitleScene();
+
 	void Initialize();
 
 	void Update();

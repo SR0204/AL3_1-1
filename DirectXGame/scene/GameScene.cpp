@@ -391,10 +391,7 @@ void GameScene::ChangePhase() {
 			deathParticles_ = new DeathParticles;
 			deathParticles_->Initialize(deathParticleModel_, &viewProjection_, deathParticlesPosition);
 
-			if (deathParticles_ && deathParticles_->IsFinished()) {
-
-				finished_ = true;
-			}
+			
 		}
 
 		// 全ての当たり判定を行う
@@ -446,7 +443,10 @@ void GameScene::ChangePhase() {
 			}
 		}
 
-		
+		if (deathParticles_ && deathParticles_->IsFinished()) {
+
+			finished_ = true;
+		}
 
 		break;
 	}

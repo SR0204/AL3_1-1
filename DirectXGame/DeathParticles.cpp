@@ -24,11 +24,7 @@ void DeathParticles::Initialize(Model* model, ViewProjection* viewProjection, co
 
 void DeathParticles::Update() {
 
-	// 終了なら何もしない
-	if (isFinished_) {
-
-		return;
-	}
+	
 
 	// ワールド変換の更新
 	for (uint32_t i = 0; i < kNumParticles; ++i) {
@@ -63,6 +59,12 @@ void DeathParticles::Update() {
 
 		// 終了扱いにする
 		isFinished_ = true;
+	}
+
+	// 終了なら何もしない
+	if (isFinished_) {
+
+		return;
 	}
 
 	color_.w = std::clamp(1.0f-counter_/kDuration, 0.0f, 1.0f);
